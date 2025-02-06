@@ -1,0 +1,32 @@
+repositories:
+  - name: knative-operator
+    url: https://knative.github.io/operator
+  - name: istio
+    url: https://istio-release.storage.googleapis.com/charts
+
+releases:
+  - name: knative-operator
+    chart: knative-operator/knative-operator
+    version: 1.17.1
+    namespace: knative-operator
+    createNamespace: true
+  - name: istio-base
+    chart: istio/base
+    namespace: istio-system
+    createNamespace: true
+  - name: istiod
+    chart: istio/istiod
+    namespace: istio-system
+    needs:
+    - istio-base
+  - name: istio-ingressgateway
+    chart: istio/gateway
+    namespace: istio-system
+    needs:
+    - istiod
+  - name: knative-serving
+    chart: ./charts/knative-serving
+    namespace: knative-serving
+    createNamespace: true
+    needs:
+    - knative-operator/knative-operator
