@@ -1,0 +1,41 @@
+[package]
+name = "wasm"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bytes = "1"
+pretty_env_logger = "0.5.0"
+
+[target.aarch64-unknown-linux-gnu.dependencies]
+tokio = { version = "1.25.2", features = [
+  "rt",
+  "macros",
+  "net",
+  "time",
+  "io-util",
+  "rt-multi-thread",
+] }
+warp = "0.3"
+
+[target.wasm32-wasip1.dependencies]
+tokio_wasi = { version = "1.25.2", features = [
+  "rt",
+  "macros",
+  "net",
+  "time",
+  "io-util",
+] }
+warp_wasi = "0.3"
+
+[[target.wasm32-wasip1.bin]]
+name = "wasm"
+path = "src/main.rs"
+
+[[target.aarch64-unknown-linux-gnu.bin]]
+name = "app"
+path = "src/main.rs"
+
+[profile.release]
+lto = true
+opt-level = "z"

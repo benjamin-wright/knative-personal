@@ -1,2 +1,4 @@
 .scratch
+.build
 .DS_Store
+target

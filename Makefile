@@ -5,6 +5,8 @@ KUBECONFIG ?= .scratch/kubeconfig.yaml
 REGISTRY_NAME ?= wasm-registry.localhost
 REGISTRY_PATH ?= $(REGISTRY_NAME):5000/$(USER)
 
+IMAGE ?= test-image
+
 ARCH ?= $(shell uname -m)
 ifeq ($(ARCH),arm64)
 	ARCH=aarch64
@@ -44,3 +46,9 @@ infra:
 stop:
 	k3d cluster delete $(CLUSTER_NAME)
 	rm -rf .scratch
+
+image:
+	cd apps/svc1 && cargo build --release
+	mkdir -p .build
+	cp apps/svc1/target/wasm32-wasip1/release/wasm.wasm .build/wasm.wasm
+	docker build -t $(IMAGE) -f docker/rust.Dockerfile .build

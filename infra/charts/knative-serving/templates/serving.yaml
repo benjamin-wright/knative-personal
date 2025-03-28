@@ -3,3 +3,7 @@ kind: KnativeServing
 metadata:
   name: knative-serving
   namespace: knative-serving
+spec:
+  config:
+    features:
+      kubernetes.podspec-runtimeclassname: enabled
