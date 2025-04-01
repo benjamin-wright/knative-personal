@@ -51,4 +51,7 @@ image:
 	cd apps/svc1 && cargo build --release
 	mkdir -p .build
 	cp apps/svc1/target/wasm32-wasip1/release/wasm.wasm .build/wasm.wasm
-	docker build -t $(IMAGE) -f docker/rust.Dockerfile .build
+	docker build -t $(IMAGE) -f docker/wasm.Dockerfile .build
+
+rust:
+	docker build --platform linux/amd64 -t $(IMAGE) -f docker/rust.Dockerfile apps/svc1

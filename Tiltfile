@@ -10,4 +10,13 @@ custom_build(
     ignore=['target'],
 )
 
-k8s_yaml(helm('./deploy', set=['name=wasm', 'image=wasm', 'runtimeClassName=wasmedge']))
+k8s_yaml(helm('./deploy', set=['name=wasm', 'image=wasm', 'runtimeClassName=wasmedge', 'nodeName=k3d-knative-test-server-0']))
+
+custom_build(
+    'rust',
+    'IMAGE=$EXPECTED_REF make rust',
+    ['./apps/svc1'],
+    ignore=['target'],
+)
+
+k8s_yaml(helm('./deploy', set=['name=rust', 'image=rust', 'nodeName=k3d-knative-test-server-0']))

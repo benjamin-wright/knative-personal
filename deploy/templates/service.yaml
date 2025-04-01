@@ -1,11 +1,28 @@
-apiVersion: serving.knative.dev/v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
   template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
     spec:
-      runtimeClassName: crun
+      {{- if .Values.nodeName }}
+      nodeName: {{ .Values.nodeName }}
+      {{- end }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName }}
+      {{- end }}
       containers:
-      - image: {{ .Values.image }}
+      - name: {{ .Values.name }}
+        image: {{ .Values.image }}
+        lifecycle:
+          preStop:
+            httpGet:
+              port: 8081
