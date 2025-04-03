@@ -4,6 +4,12 @@ metadata:
   name: knative-serving
   namespace: knative-serving
 spec:
+  ingress:
+    istio:
+      enabled: true
+      knative-ingress-gateway:
+        selector:
+          istio: ingressgateway
   config:
     features:
       kubernetes.podspec-runtimeclassname: enabled

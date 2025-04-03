@@ -33,6 +33,7 @@ cluster:
 		--registry-create $(REGISTRY_NAME) \
 		--image k3s-wasm \
 		--k3s-arg '--disable=traefik@server:*' \
+		-p '9080:80@loadbalancer' -p '9443:443@loadbalancer' \
 		--kubeconfig-update-default=false
 
 	mkdir -p .scratch
@@ -54,4 +55,4 @@ image:
 	docker build -t $(IMAGE) -f docker/wasm.Dockerfile .build
 
 rust:
-	docker build --platform linux/amd64 -t $(IMAGE) -f docker/rust.Dockerfile apps/svc1
+	docker build --platform linux/aarch64 -t $(IMAGE) -f docker/rust.Dockerfile apps/svc1
